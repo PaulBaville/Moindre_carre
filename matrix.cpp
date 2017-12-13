@@ -1,15 +1,7 @@
 #include "matrix.h"
 
-Matrix::Matrix() {
-	std::vector< std::vector< double > > values = { { 1 } };
-	values_ = values;
-}
-
 Matrix::Matrix(std::vector< std::vector< double > > values) :
 	values_(values) {
-}
-
-Matrix::~Matrix() {
 }
 
 const int Matrix::get_nb_lin() const {

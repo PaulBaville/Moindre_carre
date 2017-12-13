@@ -8,10 +8,13 @@
 class Matrix {
 
 public:
-
-	Matrix();
+	
+	/**
+ 	 * \brief A constructor of matrix.
+	 *
+	 * @param
+ 	 */
 	Matrix(std::vector< std::vector< double > > values);
-	~Matrix();
 
 	const int get_nb_lin() const;
 	const int get_nb_col() const;
