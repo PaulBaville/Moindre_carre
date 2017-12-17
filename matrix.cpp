@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-Matrix::Matrix(std::vector< std::vector< double > > values) :
+Matrix::Matrix( std::vector< std::vector< double > > values ) :
 	values_(values) {
 }
 
@@ -16,14 +16,14 @@ const int Matrix::get_nb_col() const {
 	return nb_col;
 }
 
-const double Matrix::get_value(int i, int j) const {
+const double Matrix::get_value( int i, int j ) const {
 
 	return values_[i][j];
 }
 
-Matrix Matrix::operator=(const Matrix& M) {
+Matrix Matrix::operator=( const Matrix& M ) {
 
-	if (this == &M) {
+	if( this == &M ) {
 		return *this;
 	}
 
@@ -32,39 +32,39 @@ Matrix Matrix::operator=(const Matrix& M) {
 	return *this;
 }
 
-void Matrix::operator*(const double& nb) {
+void Matrix::operator*( const double& nb ) {
 
-	for (int i = 0; i < get_nb_lin(); ++i) {
-		for (int j = 0; j < get_nb_col(); ++j) {
+	for( int i = 0; i < get_nb_lin(); ++i ) {
+		for( int j = 0; j < get_nb_col(); ++j ) {
 			values_[i][j] *= nb;
 		}
 	}
 }
 
-void Matrix::operator+(const Matrix& M) {
+void Matrix::operator+( const Matrix& M ) {
 
-	assert(get_nb_lin() == M.get_nb_lin() &&
-		   get_nb_col() == M.get_nb_col());
+	assert( get_nb_lin() == M.get_nb_lin() &&
+		    get_nb_col() == M.get_nb_col() );
 
-	for (int i = 0; i < get_nb_lin(); ++i) {
-		for (int j = 0; j < get_nb_col(); ++j) {
+	for( int i = 0; i < get_nb_lin(); ++i ) {
+		for( int j = 0; j < get_nb_col(); ++j ) {
 			values_[i][j] += M.values_[i][j];
 		}
 	}
 }
 
-void Matrix::prod_mat(const Matrix& M) {
+void Matrix::prod_mat( const Matrix& M ) {
 
-	assert(M.get_nb_lin() == get_nb_col());
+	assert( M.get_nb_lin() == get_nb_col() );
 
 	int nb_lin = get_nb_lin();
 	int nb_col = M.get_nb_col();
 
-	std::vector< std::vector< double > > temp_values(get_nb_lin(), std::vector< double >(M.get_nb_col(), 0));
+	std::vector< std::vector< double > > temp_values( get_nb_lin(), std::vector< double >( M.get_nb_col(), 0 ) );
 
-	for (int i = 0; i < nb_lin; ++i) {
-		for (int j = 0; j < nb_col; ++j) {
-			for (int k = 0; k < get_nb_col(); ++k) {
+	for( int i = 0; i < nb_lin; ++i ) {
+		for( int j = 0; j < nb_col; ++j ) {
+			for( int k = 0; k < get_nb_col(); ++k ) {
 				temp_values[i][j] += values_[i][k] * M.values_[k][j];
 			}
 		}
@@ -81,10 +81,10 @@ void Matrix::transpose() {
 	int new_nb_lin = nb_col;
 	int new_nb_col = nb_lin;
 
-	std::vector< std::vector< double > > temp_values(new_nb_lin, std::vector< double >(new_nb_col, 0));
+	std::vector< std::vector< double > > temp_values( new_nb_lin, std::vector< double >( new_nb_col, 0 ) );
 
-	for (int i = 0; i < new_nb_lin; ++i) {
-		for (int j = 0; j < new_nb_col; ++j) {
+	for( int i = 0; i < new_nb_lin; ++i ) {
+		for( int j = 0; j < new_nb_col; ++j ) {
 			temp_values[i][j] = values_[j][i];
 		}
 	}
@@ -94,12 +94,12 @@ void Matrix::transpose() {
 
 void Matrix::co_mat() {
 
-	assert(get_nb_lin() == get_nb_col() &&
-		  (get_nb_lin() == 2 || get_nb_lin() == 3));
+	assert( get_nb_lin() == get_nb_col() &&
+          ( get_nb_lin() == 2 || get_nb_lin() == 3 ) );
 
-	std::vector< std::vector< double > > temp_values(get_nb_lin(), std::vector< double >(get_nb_col(), 0));
+	std::vector< std::vector< double > > temp_values( get_nb_lin(), std::vector< double >( get_nb_col(), 0 ) );
 
-	if (get_nb_lin() == 2) {
+	if( get_nb_lin() == 2 ) {
 
 		temp_values[0][0] = values_[1][1];
 		temp_values[0][1] = -values_[1][0];
@@ -109,7 +109,7 @@ void Matrix::co_mat() {
 		values_ = temp_values;
 
 	}
-	else if (get_nb_lin() == 3) {
+	else {
 
 		temp_values[0][0] =  (values_[1][1] * values_[2][2] - values_[1][2] * values_[2][1]);
 		temp_values[0][1] = -(values_[0][1] * values_[2][2] - values_[0][2] * values_[2][1]);
@@ -128,17 +128,17 @@ void Matrix::co_mat() {
 
 double Matrix::det() {
 
-	assert(get_nb_lin() == get_nb_col() &&
-		  (get_nb_lin() == 2 || get_nb_lin() == 3));
+	assert( get_nb_lin() == get_nb_col() &&
+		  ( get_nb_lin() == 2 || get_nb_lin() == 3 ) );
 
-	if (get_nb_lin() == 2) {
+	if( get_nb_lin() == 2 ) {
 
 		double detM = values_[0][0] * values_[1][1] - values_[1][0] * values_[0][1];
 
 		return detM;
 
 	}
-	else if (get_nb_lin() == 3) {
+	else {
 
 		double detM = values_[0][0] * values_[1][1] * values_[2][2] +
 					  values_[0][1] * values_[1][2] * values_[2][0] +
@@ -151,7 +151,7 @@ double Matrix::det() {
 	}
 }
 
-Matrix Matrix::solve(Matrix& A, const Matrix& B) {
+Matrix Matrix::solve( Matrix& A, const Matrix& B ) {
 
 	Matrix Aa = A;
 	A.transpose();

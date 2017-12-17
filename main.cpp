@@ -25,7 +25,7 @@ std::vector< std::vector< double > > read_values(std::string file_name) {
 
 	std::ifstream file(file_name);
 
-	if (!file.good()) {
+	if( !file.good() ) {
 
 		std::cerr << "File " << file_name << " has not been well opened " << std::endl;
 
@@ -48,7 +48,7 @@ std::vector< std::vector< double > > read_values(std::string file_name) {
 	file >> temp;
 	std::cout << "Coordinate 2 = " << temp << std::endl;
 
-	for (int i = 0; i < nb_values; ++i) {
+	for( int i = 0; i < nb_values; ++i ) {
 
 		double X_value;
 		double Y_value;
@@ -65,32 +65,33 @@ std::vector< std::vector< double > > read_values(std::string file_name) {
 	return measured_values;
 }
 
-int main(int argc, char* argv[]) {
+int main( int argc, char* argv[] ) {
 
 	std::string file_name;
-	std::cout << "values_file_name = ";
-	std::cin >> file_name;
-
+//	std::cout << "values_file_name = ";
+//	std::cin >> file_name;
+    file_name = "measured_values.txt";
+    std::cout << "file = " << file_name << std::endl;
 	std::vector< std::vector< double > > values = read_values(file_name);
 
 	int nb_points = values.size();
 
-	int nb_parameters;
-	std::cout << "nb_parameters = ";
-	std::cin >> nb_parameters;
+	int polynomial_order;
+	std::cout << "polynomial order = ";
+	std::cin >> polynomial_order;
 
-	assert(nb_parameters == 2 || nb_parameters == 3);
+	assert( polynomial_order == 1 || polynomial_order == 2 );
 
-	std::vector< std::vector< double > > X_values(nb_points, std::vector< double >(nb_parameters, 1));
+	std::vector< std::vector< double > > X_values(nb_points, std::vector< double >(polynomial_order + 1, 1));
 	std::vector< std::vector< double > > Y_values(nb_points, std::vector< double >(1, 1));
 
 	double a;
 	double b;
 	double c;
 
-	if (nb_parameters == 2) {
+	if( polynomial_order == 1 ) {
 
-		for (int i = 0; i < nb_points; ++i) {
+		for( int i = 0; i < nb_points; ++i ) {
 			X_values[i][0] = values[i][0];
 			Y_values[i][0] = values[i][1];
 		}
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 
-		for (int i = 0; i < nb_points; ++i) {
+		for( int i = 0; i < nb_points; ++i ) {
 			X_values[i][0] = values[i][0] * values[i][0];
 			X_values[i][1] = values[i][0];
 			Y_values[i][0] = values[i][1];
@@ -129,16 +130,18 @@ int main(int argc, char* argv[]) {
 		std::cout << "c = " << c << std::endl;
 	}
 
-	std::string commande = "python affichage_reg_lin.py " +
+	std::string commande = "python graphics.py " +
 		file_name + " " +
-		convert_int_to_string(nb_parameters) + " " +
+		convert_int_to_string(polynomial_order) + " " +
 		convert_double_to_string(a) + " " +
 		convert_double_to_string(b) + " " +
 		convert_double_to_string(c);
 
+    std::cout << commande << std::endl;
+
 	printf("start python\n");
 	system(commande.c_str());
-	printf("python finieshed\n");
+	printf("python finished\n");
 
 	return 0;
 }
